@@ -34,7 +34,27 @@ struct Options
     // is determined by whether it is present or absent).
     #[structopt(short = "d", long = "dead")]
     /// Make the cat appear dead
-    dead: bool
+    dead: bool,
+
+    // • Short / long CL argument names don't have to be the same as
+    //   the struct field name.
+    // • parse(from_os_str) defines a custom parser scheme. By default
+    //   StructOpt will use the from_str scheme, which uses the function signature fn(&str) -> T.
+    //   But in this case, we are passing a string of the path name, which might be
+    //   represented differently in different operating systems.
+    //   (see https://doc.rust-lang.org/std/ffi/struct.OsString.html for why this is necessary)
+    //   Therefore, we need to parse from an &OsStr instead.
+    // • The type defined for catfile is wrapped in an Option<T>. This is how you indicate
+    //   that this field is optional. If the field is not provided, it will simply be Option::None.
+    //   There are other options, like Vec<T>, that represent a list of arguments, and u64 indicates
+    //   that you want to count the occurrences of a parameter. For example , -v, -vv, and -vvv are
+    //   commonly used to set the verbosity level.
+    // • Inside the Option, we use a std::path::PathBuf instead of a raw string.
+    //   PathBuf can help you handle paths to files more robustly because it hides many
+    //   differences in how the operating systems represent paths.
+    #[structopt(short = "f", long = "file", parse(from_os_str))]
+    /// Load the cat picture from the specified file
+    catfile: Option<std::path::PathBuf>,
 }
 
 fn main()
@@ -45,10 +65,27 @@ fn main()
     { eprintln!("A cat should not bark like a dog!"); } // print to stderr
 
     println!("{}", message.bright_yellow().underline().on_purple());
-    println!(" \\");
-    println!("  \\");
-    println!("   /\\_/\\");
     let eye = if options.dead { "x".red() } else { "o".bright_green() };
-    println!("  ( {e} {e} )", e = eye);
-    println!("  =( I )=");
+    match &options.catfile
+    {
+        Some(path) =>
+        {
+            let cat_template = std::fs::read_to_string(path)
+                .expect(&format!("could not read file {:?}", path));
+            // Can’t use format!() to replace the eyes with o or x.
+            // format!() needs to know the formatting string at compile time,
+            // but the catfile string is loaded at runtime.
+            let cat_picture = cat_template.replace("{eye}", &eye);
+            // Or use a library like strfmt to have more format!-flavor code.
+            println!("{}", &cat_picture);
+        },
+        None =>
+        {
+            println!(" \\");
+            println!("  \\");
+            println!("   /\\_/\\");
+            println!("  ( {e} {e} )", e = eye);
+            println!("  =( I )=");
+        }
+    }
 }
