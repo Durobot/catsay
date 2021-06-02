@@ -1,7 +1,23 @@
-//extern crate structopt;
+//extern crate structopt; -- Not needed in Rust 2018
 
+// The library called StructOpt combines clap and custom derive. Custom derive is a
+// feature in Rust that automatically generates a default implementation of a
+// trait by annotating a struct.
 use structopt::StructOpt;
+// The colored crate defines a Colorize trait, which is implemented on a
+// &str and String. This trait provides various chainable coloring functions:
+// • Coloring the text: red(), green(), blue(), etc.
+// • Coloring the background: on_red() (i.e., text on red
+//   background), on_green(), on_blue(), etc.
+// • Brighter version: bright_red(), on_bright_green(),
+//   etc.
+// • Styling: bold(), underline(), italic(), etc.
+use colored::*;
 
+// This custom derive attribute tells structopt to use a macro defined by
+// the StructOpt automatically implements the StructOpt trait for the struct.
+// This implementation will contain the necessary clap (a command line argument parsing library
+// used by structopt "under the hood") code for parsing the arguments.
 #[derive(StructOpt)]
 struct Options
 {
@@ -28,13 +44,11 @@ fn main()
     if message.to_lowercase() == "woof"
     { eprintln!("A cat should not bark like a dog!"); } // print to stderr
 
-    println!("{}", message);
+    println!("{}", message.bright_yellow().underline().on_purple());
     println!(" \\");
     println!("  \\");
     println!("   /\\_/\\");
-    if options.dead
-    { println!("  ( x x )"); }
-    else
-    { println!("  ( o o )"); }
+    let eye = if options.dead { "x".red() } else { "o".bright_green() };
+    println!("  ( {e} {e} )", e = eye);
     println!("  =( I )=");
 }
