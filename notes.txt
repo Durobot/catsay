@@ -1,0 +1,52 @@
+First run of the version using structopt library:
+
+cargo run -- Hello!
+    Updating crates.io index
+  Downloaded atty v0.2.14
+  Downloaded quote v1.0.9
+  Downloaded proc-macro2 v1.0.27
+  Downloaded unicode-segmentation v1.7.1
+  Downloaded unicode-width v0.1.8
+  Downloaded unicode-xid v0.2.2
+  Downloaded version_check v0.9.3
+  Downloaded vec_map v0.8.2
+  Downloaded structopt v0.3.21
+  Downloaded structopt-derive v0.4.14
+  Downloaded proc-macro-error v1.0.4
+  Downloaded proc-macro-error-attr v1.0.4
+  Downloaded heck v0.3.2
+  Downloaded libc v0.2.95
+  Downloaded syn v1.0.72
+  Downloaded clap v2.33.3
+  Downloaded 16 crates (1.3 MB) in 0.99s
+   Compiling proc-macro2 v1.0.27
+   Compiling version_check v0.9.3
+   Compiling unicode-xid v0.2.2
+   Compiling syn v1.0.72
+   Compiling libc v0.2.95
+   Compiling bitflags v1.2.1
+   Compiling unicode-segmentation v1.7.1
+   Compiling unicode-width v0.1.8
+   Compiling vec_map v0.8.2
+   Compiling ansi_term v0.11.0
+   Compiling strsim v0.8.0
+   Compiling lazy_static v1.4.0
+   Compiling textwrap v0.11.0
+   Compiling heck v0.3.2
+   Compiling proc-macro-error-attr v1.0.4
+   Compiling proc-macro-error v1.0.4
+   Compiling quote v1.0.9
+   Compiling atty v0.2.14
+   Compiling clap v2.33.3
+   Compiling structopt-derive v0.4.14
+   Compiling structopt v0.3.21
+   Compiling catsay v0.1.0 (/home/kyron5/projects/rust-sandbox/catsay)
+    Finished dev [unoptimized + debuginfo] target(s) in 16.55s
+     Running `target/debug/catsay 'Hello'\!''`
+Hello!
+ \
+  \
+   /\_/\
+  ( o o )
+  =( I )=
+
