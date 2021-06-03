@@ -61,6 +61,7 @@ struct Options
 
 // Trying to returning Result<(), std::error::Error> produces the following error:
 // the size for values of type `(dyn std::error::Error + 'static)` cannot be known at compilation time 
+// dyn std::error::Error is a trait object, meaning "any type that implements std::error::Error trait
 fn main() -> Result<(), Box<dyn std::error::Error>>
 {
     let options = Options::from_args();
