@@ -50,3 +50,18 @@ Hello!
   ( o o )
   =( I )=
 
+-------------------------------------------------------------
+
+Results of using
+fn main() -> Result<(), Box<dyn std::error::Error>>
+  and
+let cat_template = std::fs::read_to_string(path)?;
+  and
+Ok(())
+with bad file path argument:
+
+cargo run -- -f file_doesnt_exist.txt Ohai!
+    Finished dev [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/catsay -f file_doesnt_exist.txt 'Ohai'\!''`
+Ohai!
+Error: Os { code: 2, kind: NotFound, message: "No such file or directory" }

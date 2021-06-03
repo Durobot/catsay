@@ -12,6 +12,8 @@ use structopt::StructOpt;
 // • Brighter version: bright_red(), on_bright_green(),
 //   etc.
 // • Styling: bold(), underline(), italic(), etc.
+//
+// Use NO_COLOR=1 cargo run to suppress color output.
 use colored::*;
 
 // This custom derive attribute tells structopt to use a macro defined by
@@ -57,7 +59,9 @@ struct Options
     catfile: Option<std::path::PathBuf>,
 }
 
-fn main()
+// Trying to returning Result<(), std::error::Error> produces the following error:
+// the size for values of type `(dyn std::error::Error + 'static)` cannot be known at compilation time 
+fn main() -> Result<(), Box<dyn std::error::Error>>
 {
     let options = Options::from_args();
     let message = options.message;
@@ -70,13 +74,13 @@ fn main()
     {
         Some(path) =>
         {
-            let cat_template = std::fs::read_to_string(path)
-                .expect(&format!("could not read file {:?}", path));
+            let cat_template = std::fs::read_to_string(path)?;
+            //    .expect(&format!("could not read file {:?}", path));
             // Can’t use format!() to replace the eyes with o or x.
             // format!() needs to know the formatting string at compile time,
             // but the catfile string is loaded at runtime.
             let cat_picture = cat_template.replace("{eye}", &eye);
-            // Or use a library like strfmt to have more format!-flavor code.
+            // Or use a library like strfmt to have more format!-flavored code.
             println!("{}", &cat_picture);
         },
         None =>
@@ -88,4 +92,6 @@ fn main()
             println!("  =( I )=");
         }
     }
+
+    Ok(())
 }
