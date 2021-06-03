@@ -1,4 +1,6 @@
 //extern crate structopt; -- Not needed in Rust 2018
+use std::io; // "use of undeclared crate or module `io`" in io::stdin().read_to_string(&mut message)?;
+use std::io::Read; // io::stdin().read_to_string() is an item of std::io::Read trait
 
 // The library called StructOpt combines clap and custom derive. Custom derive is a
 // feature in Rust that automatically generates a default implementation of a
@@ -57,6 +59,10 @@ struct Options
     #[structopt(short = "f", long = "file", parse(from_os_str))]
     /// Load the cat picture from the specified file
     catfile: Option<std::path::PathBuf>,
+
+    #[structopt(short = "i", long = "stdin")]
+    /// Read the message from STDIN instead of the argument
+    stdin: bool,
 }
 
 // Trying to returning Result<(), std::error::Error> produces the following error:
@@ -65,7 +71,12 @@ struct Options
 fn main() -> Result<(), Box<dyn std::error::Error>>
 {
     let options = Options::from_args();
-    let message = options.message;
+    let mut message = String::new(); // mut because io::stdin().read_to_string()
+    if options.stdin
+    { io::stdin().read_to_string(&mut message)?; }
+    else
+    { message = options.message; }
+
     if message.to_lowercase() == "woof"
     { eprintln!("A cat should not bark like a dog!"); } // print to stderr
 
