@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 structopt = "0.3.21"
 colored = "2"
+assert_cmd = "1"
